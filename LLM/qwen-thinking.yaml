@@ -1,0 +1,118 @@
+# axolotlai/axolotl-cloud:main-20250207-py3.11-cu124-2.4.1
+# axolotlai/axolotl-cloud:main-latest
+
+base_model: Qwen/Qwen3-30B-A3B
+# Automatically upload checkpoint and final model to HF
+hub_model_id: animuslabs/Xavier-R2
+
+plugins:
+  - axolotl.integrations.cut_cross_entropy.CutCrossEntropyPlugin
+strict: false
+
+load_in_8bit: false
+load_in_4bit: true
+strict: false
+
+adapter: qlora
+
+sequence_len: 8192
+sample_packing: true
+pad_to_sequence_len: true
+
+lora_r: 32
+lora_alpha: 16
+lora_dropout: 0.05
+lora_target_modules: ["q_proj", "k_proj", "v_proj", "o_proj"]
+lora_modules_to_save: ["embed_tokens", "lm_head"]
+
+chat_template: chatml
+datasets:
+  - path: animuslabs/hexaco_conversations
+    type: chat_template
+    field_messages: messages
+    message_field_role: role
+    message_field_content: content
+    roles_to_train: ["assistant"]
+    train_on_eos: turn
+    
+  - path: animuslabs/thinking_next_conversational_turn
+    type: chat_template
+    field_messages: messages
+    message_field_role: role
+    message_field_content: content
+    roles_to_train: ["assistant"]
+    train_on_eos: turn
+
+  - path: animuslabs/thinking_dialogue
+    type: chat_template
+    field_messages: messages
+    message_field_role: role
+    message_field_content: content
+    roles_to_train: ["assistant"]
+    train_on_eos: turn
+
+  - path: animuslabs/OF-Conversations
+    type: chat_template
+    field_messages: messages
+    message_field_role: role
+    message_field_content: content
+    roles_to_train: ["assistant"]
+    train_on_eos: turn
+
+  - path: animuslabs/Roleplay-1.0
+    type: chat_template
+    field_messages: messages
+    message_field_role: role
+    message_field_content: content
+    roles_to_train: ["assistant"]
+    train_on_eos: turn
+
+  - path: animuslabs/Reasoning-Function-Calling
+    type: chat_template
+    field_messages: messages
+    message_field_role: role
+    message_field_content: content
+    roles_to_train: ["assistant"]
+    train_on_eos: turn
+
+wandb_project: Xavier-R1
+wandb_entity: animuslabs
+wandb_watch:
+wandb_name:
+wandb_log_model:
+
+gradient_accumulation_steps: 1
+micro_batch_size: 1
+num_epochs: 1
+optimizer: paged_adamw_32bit
+lr_scheduler: cosine
+learning_rate: 0.0004
+
+train_on_inputs: false
+group_by_length: false
+bf16: auto
+fp16:
+tf32: false
+
+gradient_checkpointing: true
+gradient_checkpointing_kwargs:
+  use_reentrant: false
+early_stopping_patience:
+resume_from_checkpoint:
+logging_steps: 1
+xformers_attention:
+flash_attention: true
+
+warmup_steps: 10
+evals_per_epoch: 25
+eval_table_size:
+saves_per_epoch: 2
+debug:
+deepspeed: deepspeed_configs/zero2.json
+weight_decay: 0.0
+fsdp:
+fsdp_config:
+special_tokens:
+  bos_token: <|im_start|>
+  eos_token: <|im_end|>
+  pad_token: <|im_end|>
