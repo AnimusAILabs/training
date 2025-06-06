@@ -3,7 +3,7 @@
 
 base_model: Qwen/Qwen3-30B-A3B
 # Automatically upload checkpoint and final model to HF
-hub_model_id: animuslabs/Xavier-R2
+hub_model_id: animuslabs/Xavier-R1-06-06
 
 plugins:
   - axolotl.integrations.cut_cross_entropy.CutCrossEntropyPlugin
@@ -75,7 +75,15 @@ datasets:
     roles_to_train: ["assistant"]
     train_on_eos: turn
 
-wandb_project: Xavier-R1
+  - path: animuslabs/Dating
+    type: chat_template
+    field_messages: messages
+    message_field_role: role
+    message_field_content: content
+    roles_to_train: ["assistant"]
+    train_on_eos: turn
+
+wandb_project: Xavier-R1-06-06
 wandb_entity: animuslabs
 wandb_watch:
 wandb_name:
