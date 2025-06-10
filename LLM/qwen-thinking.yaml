@@ -1,5 +1,6 @@
 # axolotlai/axolotl-cloud:main-20250207-py3.11-cu124-2.4.1
 # axolotlai/axolotl-cloud:main-latest
+# accelerate launch -m axolotl.cli.train examples/qwen3/animus.yml --deepspeed_config deepspeed_configs/zero2.json
 
 base_model: Qwen/Qwen3-30B-A3B
 # Automatically upload checkpoint and final model to HF
